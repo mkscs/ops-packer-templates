@@ -1,0 +1,133 @@
+{
+  "builders": [
+    {
+      "boot_command": [
+        "<esc><esc><enter><wait>",
+        "/install/vmlinuz noapic ",
+        "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg ",
+        "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
+        "hostname={{ user `hostname` }} ",
+        "fb=false debconf/frontend=noninteractive ",
+        "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA ",
+        "keyboard-configuration/variant=USA console-setup/ask_detect=false ",
+        "passwd/user-fullname={{ user `ssh_fullname` }} ",
+        "passwd/user-password={{ user `ssh_password` }} ",
+        "passwd/user-password-again={{ user `ssh_password` }} ",
+        "passwd/username={{ user `ssh_username` }} ",
+        "initrd=/install/initrd.gz -- <enter>"
+      ],
+      "disk_size": 5000,
+      "guest_os_type": "Ubuntu_64",
+      "headless": "{{ user `headless` }}",
+      "http_directory": "http",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_checksum_type": "sha256",
+      "iso_urls": [
+        "{{ user `iso_path` }}/{{ user `iso_name` }}",
+        "{{ user `iso_url` }}"
+      ],
+      "shutdown_command": "echo '{{ user `ssh_password` }}'|sudo -S shutdown -P now",
+      "ssh_password": "{{ user `ssh_password` }}",
+      "ssh_username": "{{ user `ssh_username` }}",
+      "ssh_wait_timeout": "10000s",
+      "type": "virtualbox-iso",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "512"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "1"
+        ]
+      ],
+      "virtualbox_version_file": ".vbox_version",
+      "vm_name": "{{user `vm_name`}}"
+    },
+    {
+      "type": "digitalocean",
+      "api_token": "{{ user `do_api_token` }}",
+      "image":"{{user `do_image` }}",
+      "region": "{{ user `do_region` }}",
+      "size": "{{ user `do_size` }}",
+      "droplet_name": "{{ user `vm_name` }}",
+      "snapshot_name": "build-by-packer-{{timestamp}}"
+    }
+  ],
+  "post-processors": [
+      {
+        "keep_input_artifact": false,
+        "output": "box/{{user `vm_name`}}-{{user `version`}}.box",
+        "type": "vagrant"
+      }
+    ],
+  "provisioners": [
+    {
+      "environment_vars": [
+        "UPDATE={{user `update`}}",
+        "INSTALL_VAGRANT_KEY={{user `install_vagrant_key`}}",
+        "SSH_USERNAME={{user `ssh_username`}}",
+        "SSH_PASSWORD={{user `ssh_password`}}",
+        "HTTP_PROXY={{user `http_proxy`}}",
+        "HTTPS_PROXY={{user `https_proxy`}}",
+        "FTP_PROXY={{user `ftp_proxy`}}",
+        "RSYNC_PROXY={{user `rsync_proxy`}}",
+        "NO_PROXY={{user `no_proxy`}}"
+      ],
+      "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+      "scripts": [
+        "scripts/base.sh"
+      ],
+      "type": "shell",
+      "override": {
+        "virtualbox-iso": {
+          "scripts": [
+            "scripts/default.sh",
+            "scripts/VBOX/vbox_base.sh"
+          ]
+        },
+        
+        "digitalocean": {
+          "scripts": [
+            "scripts/DO/do_access.sh",
+            "scripts/default.sh",
+            "scripts/DO/do_env.sh"
+          ]
+        }
+      }
+    }
+  ],
+  "variables": {
+    "headless": "",
+    
+    "ftp_proxy": "{{env `FTP_PROXY`}}",
+    "http_proxy": "{{env `HTTP_PROXY`}}",
+    "https_proxy": "{{env `HTTPS_PROXY`}}",
+    "no_proxy": "{{env `NO_PROXY`}}",
+    "rsync_proxy": "{{env `RSYNC_PROXY`}}",
+    
+    "iso_checksum": "6501c8545374665823384bbb6235f865108f56d8a30bbf69dd18df73c14ccb84",
+    "iso_name": "ubuntu-15.04-server-amd64.iso",
+    "iso_path": "iso",
+    "iso_url": "http://releases.ubuntu.com/15.04/ubuntu-15.04-server-amd64.iso",
+        
+    "ssh_fullname": "vagrant",
+    "ssh_password": "vagrant",
+    "ssh_username": "vagrant",
+   
+    "update": "false",
+    "version": "0.1.0",
+   
+    "do_api_token": "{{ env `DO_API_TOKEN` }}",
+    "do_region": "fra1",
+    "do_size": "1gb",
+    "do_image": "ubuntu-15-04-x64",
+    
+    "hostname": "vagrantlayer",
+    "vm_name": "ubu1504-docker"
+  }
+}
