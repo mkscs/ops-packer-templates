@@ -93,7 +93,6 @@
         
         "digitalocean": {
           "scripts": [
-            "scripts/DO/do_access.sh",
             "scripts/default.sh",
             "scripts/DO/do_env.sh"
           ]
