@@ -56,7 +56,7 @@
       "region": "{{ user `do_region` }}",
       "size": "{{ user `do_size` }}",
       "droplet_name": "{{ user `vm_name` }}",
-      "snapshot_name": "build-by-packer-{{timestamp}}"
+      "snapshot_name": "{{ user `vm_name` }}-by-packer-{{timestamp}}"
     }
   ],
   "post-processors": [
