@@ -10,7 +10,7 @@
         "fb=false debconf/frontend=noninteractive ",
         "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA ",
         "keyboard-configuration/variant=USA console-setup/ask_detect=false ",
-        "passwd/user-fullname={{ user `ssh_fullname` }} ",
+        "passwd/user-fullname={{ user `ssh_username` }} ",
         "passwd/user-password={{ user `ssh_password` }} ",
         "passwd/user-password-again={{ user `ssh_password` }} ",
         "passwd/username={{ user `ssh_username` }} ",
@@ -46,6 +46,7 @@
         ]
       ],
       "virtualbox_version_file": ".vbox_version",
+      "guest_additions_mode": "disable",
       "vm_name": "{{user `vm_name`}}"
     },
     {
@@ -68,15 +69,8 @@
   "provisioners": [
     {
       "environment_vars": [
-        "UPDATE={{user `update`}}",
-        "INSTALL_VAGRANT_KEY={{user `install_vagrant_key`}}",
         "SSH_USERNAME={{user `ssh_username`}}",
-        "SSH_PASSWORD={{user `ssh_password`}}",
-        "HTTP_PROXY={{user `http_proxy`}}",
-        "HTTPS_PROXY={{user `https_proxy`}}",
-        "FTP_PROXY={{user `ftp_proxy`}}",
-        "RSYNC_PROXY={{user `rsync_proxy`}}",
-        "NO_PROXY={{user `no_proxy`}}"
+        "SSH_PASSWORD={{user `ssh_password`}}"
       ],
       "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
       "scripts": [
@@ -90,7 +84,7 @@
             "scripts/VBOX/vbox_base.sh"
           ]
         },
-        
+
         "digitalocean": {
           "scripts": [
             "scripts/default.sh",
@@ -102,30 +96,25 @@
   ],
   "variables": {
     "headless": "",
-    
-    "ftp_proxy": "{{env `FTP_PROXY`}}",
-    "http_proxy": "{{env `HTTP_PROXY`}}",
-    "https_proxy": "{{env `HTTPS_PROXY`}}",
-    "no_proxy": "{{env `NO_PROXY`}}",
-    "rsync_proxy": "{{env `RSYNC_PROXY`}}",
-    
+
+
     "iso_checksum": "6501c8545374665823384bbb6235f865108f56d8a30bbf69dd18df73c14ccb84",
     "iso_name": "ubuntu-15.04-server-amd64.iso",
     "iso_path": "iso",
     "iso_url": "http://releases.ubuntu.com/15.04/ubuntu-15.04-server-amd64.iso",
-        
-    "ssh_fullname": "vagrant",
+
+    "ssh_username": "vagrant",
     "ssh_password": "vagrant",
     "ssh_username": "vagrant",
-   
+
     "update": "false",
     "version": "0.1.0",
-   
+
     "do_api_token": "{{ env `DO_API_TOKEN` }}",
     "do_region": "fra1",
     "do_size": "1gb",
     "do_image": "ubuntu-15-04-x64",
-    
+
     "hostname": "vagrantlayer",
     "vm_name": "ubu1504-docker"
   }

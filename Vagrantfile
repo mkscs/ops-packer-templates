@@ -12,8 +12,18 @@ Vagrant.configure(2) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "ubu1504-docker"
-  
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  config.vm.define "ubuntu", primary: true, autostart: false do |ubuntu|
+    ubuntu.vm.box = "ubu1504-docker"
+  end
+
+  config.vm.define "coreos", autostart: false do |coreos|
+    coreos.ssh.insert_key = false
+    coreos.vm.box = "coreos-stable"
+  end
+
+
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -39,7 +49,6 @@ Vagrant.configure(2) do |config|
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
-  config.vm.synced_folder ".", "/vagrant", disabled: true
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.

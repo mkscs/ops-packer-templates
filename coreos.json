@@ -1,0 +1,77 @@
+{
+  "builders": [
+    {
+      "boot_command": [
+        "sudo -i<enter>",
+        "systemctl stop sshd.socket<enter>",
+        "wget http://{{ .HTTPIP }}:{{ .HTTPPort }}/cloud-config.yml<enter>",
+        "coreos-install -d /dev/sda -C {{user `coreos_channel`}} -c cloud-config.yml<enter>",
+        "shutdown -r now<enter>"
+      ],
+      "disk_size":  5000,
+      "guest_os_type": "Linux26_64",
+      "headless": "{{ user `headless` }}",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_checksum_type": "md5",
+      "iso_urls": [
+        "{{ user `iso_path` }}/{{ user `iso_name` }}",
+        "http://{{ user `coreos_channel` }}.release.core-os.net/amd64-usr/{{ user `coreos_version` }}/coreos_production_iso_image.iso"
+      ],
+      "boot_wait":"30s",
+      "shutdown_command": "echo '{{ user `ssh_password` }}'|sudo -S shutdown -P now",
+      "ssh_username": "{{ user `ssh_username` }}",
+      "ssh_password": "{{ user `ssh_password` }}",
+      "ssh_wait_timeout": "200s",
+      "type": "virtualbox-iso",
+      "http_directory":"http",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "1024"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "1"
+        ]
+      ],
+      "virtualbox_version_file": ".vbox_version",
+      "guest_additions_mode": "disable",
+      "vm_name": "coreos-{{ user `coreos_channel` }}"
+    }
+  ],
+    "post-processors": [
+        {
+          "keep_input_artifact": false,
+          "output": "box/{{ user `vm_name`}}-{{ user `coreos_channel` }}-{{ user `version`}}.box",
+          "type": "vagrant"
+        }
+      ],
+  "provisioners": [
+    {
+      "type":"file",
+      "source":"http/cloud-config.yml",
+      "destination":"cloud-config.yml"
+    }
+  ],
+  "variables": {
+    "headless": "",
+
+    "coreos_channel": "stable",
+    "coreos_version": "current",
+
+    "iso_checksum": "0dd7086b7a169702242ad97a2f4758ec",
+    "iso_path": "iso",
+
+    "ssh_username": "vagrant",
+    "ssh_password": "vagrant",
+
+    "update": "false",
+    "version": "0.1.0",
+
+    "vm_name": "coreos"
+  }
+}

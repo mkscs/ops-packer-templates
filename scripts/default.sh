@@ -3,6 +3,7 @@
 # disable reverse DNS lookup for faster sshd logging
 echo "UseDNS no" >> /etc/ssh/sshd_config
 
+
 # create default user and home directory
 useradd vagrant
 mkdir /home/vagrant
@@ -13,8 +14,6 @@ echo "vagrant:vagrant" | chpasswd
 # grant vagrant's access
 echo "Defaults:vagrant !requiretty" >> /etc/sudoers
 echo "vagrant  ALL=(ALL) NOPASSWD:SETENV: /bin/" >> /etc/sudoers
-
-
 
 # get curl first
 apt-get -y install curl
