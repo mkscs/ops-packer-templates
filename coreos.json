@@ -47,11 +47,12 @@
         {
           "keep_input_artifact": false,
           "output": "box/{{ user `vm_name`}}-{{ user `coreos_channel` }}-{{ user `version`}}.box",
-          "type": "vagrant"
+          "type": "vagrant",
+          "only": ["virtualbox-iso"]
         }
       ],
   "provisioners": [
-    {
+    {    
       "type":"file",
       "source":"http/cloud-config.yml",
       "destination":"cloud-config.yml"

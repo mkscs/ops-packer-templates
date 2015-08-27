@@ -74,9 +74,7 @@
         "SSH_PASSWORD={{user `ssh_password`}}"
       ],
       "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
-      "scripts": [
-        "scripts/base.sh"
-      ],
+
       "type": "shell",
       "override": {
         "virtualbox-iso": {
@@ -106,7 +104,6 @@
 
     "ssh_username": "vagrant",
     "ssh_password": "vagrant",
-    "ssh_username": "vagrant",
 
     "update": "false",
     "version": "0.1.0",
