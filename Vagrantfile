@@ -9,8 +9,7 @@ $share = ""
 
 $ubuntu_ip = ''
 $ubuntu_settings = <<SCRIPT
-systemctl enable docker
-systemctl start docker
+/etc/init.d/docker start
 
 apt-get install -y cachefilesd
 cat <<EOF >> /etc/default/cachefilesd
@@ -18,7 +17,7 @@ RUN=yes
 EOF
 
 apt-get install -y puppet
-systemctl stop puppet
+/etc/init.d/puppet stop
 unlink /etc/puppet/puppet.conf
 ln -s /home/vagrant/projects/files/puppet.conf /etc/puppet/puppet.conf
 puppet apply /home/vagrant/projects/puppet/manifests/init.pp
@@ -26,7 +25,7 @@ puppet cert revoke --all
 puppet cert clean --all
 rm -rf /var/lib/puppet/ssl/* 2>/dev/null
 apt-get install -y puppetmaster
-systemctl start puppet
+/etc/init.d/puppet start
 puppet agent --enable
 puppet agent -vt
 puppet cert sign --all
