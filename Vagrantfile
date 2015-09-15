@@ -28,7 +28,6 @@ apt-get install -y puppetmaster
 /etc/init.d/puppet start
 puppet agent --enable
 puppet agent -vt
-puppet cert sign --all
 SCRIPT
 
 Vagrant.configure(2) do |config|
@@ -39,9 +38,9 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "ubuntu", primary: true, autostart: false do |ubuntu|
     ubuntu.vm.box = "ubu1504-docker"
-    
+
     ubuntu.vm.network :private_network, ip: $ubuntu_ip
-    ubuntu.vm.provision "administrate_basic_vm_settings", type: "shell",
+    ubuntu.vm.provision "basic_vm_settings", type: "shell",
       inline: $ubuntu_settings
   end
 
