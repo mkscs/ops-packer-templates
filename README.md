@@ -1,5 +1,7 @@
 Packer templates for various systems and providers
 
+**Prereq:** Packer.io has to be installed
+
 Virtualbox
 - Ubuntu (15.04-docker)
 - CoreOS
@@ -8,6 +10,7 @@ DigitalOcean
 - Ubuntu (15.04-docker)
 
 **Ubuntu 15.04 - docker**
+  - currently builds upstart box by default
 * DO uses *vagrant:vagrant* credentials 
 * vbox uses mitchellh's pub key & vagrant:vagrant
 * installs docker by default
