@@ -26,8 +26,11 @@ curl -sSL https://get.docker.io/gpg | apt-key add -
 apt-get update -y
 
 # install packages
+apt-get -y install upstart-sysv 
 apt-get -y install lxc-docker
 apt-get -y install zsh
+
+update-initramfs -u
 
 # some zsh makeup
 cat <<'EOT' >> ~/.zshrc
