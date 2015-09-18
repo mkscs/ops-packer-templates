@@ -62,7 +62,7 @@
   "post-processors": [
       {
         "keep_input_artifact": false,
-        "output": "box/{{user `vm_name`}}-{{user `version`}}-systemd.box",
+        "output": "box/{{user `vm_name`}}-{{user `version`}}.box",
         "type": "vagrant",
         "only": [ "virtualbox-iso" ]
       }
