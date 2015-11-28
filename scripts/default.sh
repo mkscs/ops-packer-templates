@@ -20,14 +20,16 @@ apt-get -y install curl
 
 # add docker to repository
 echo "deb https://get.docker.io/ubuntu docker main" > /etc/apt/sources.list.d/docker.list
+echo "deb https://apt.dockerproject.org/repo ubuntu-vivid main" >> /etc/apt/sources.list.d/docker.list
 curl -sSL https://get.docker.io/gpg | apt-key add -
+apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
 
 # update indexes
 apt-get update -y
 
 # install packages
 apt-get -y install upstart-sysv 
-apt-get -y install lxc-docker
+apt-get -y install docker-engine
 apt-get -y install zsh
 
 update-initramfs -u
