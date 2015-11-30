@@ -24,6 +24,9 @@ write_files:
         PasswordAuthentication yes
         UseDNS no
         Subsystem sftp internal-sftp
+  - path: /root/.bash_profile
+    content: |
+        export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/opt"
 coreos:
   update:
     reboot-strategy: off
