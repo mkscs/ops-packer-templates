@@ -75,7 +75,7 @@
     "coreos_channel": "stable",
     "coreos_version": "current",
 
-    "iso_checksum": "f4f9739488252b46e0a57bd47fb0dfca",
+    "iso_checksum": "d6eec5976ba312a4df49d440ca3e6e71",
     "iso_path": "iso",
 
     "ssh_username": "vagrant",
