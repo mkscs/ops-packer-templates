@@ -53,6 +53,17 @@
       ],
   "provisioners": [
     {
+      "type":"shell",
+      "override": {
+        "virtualbox-iso": {
+          "scripts": [
+            "scripts/VBOX/coreos/provision-terraform.sh"
+          ]
+        }
+      }
+    },
+    
+    {
       "type":"file",
       "source":"http/cloud-config.yml",
       "destination":"cloud-config.yml"
@@ -64,14 +75,14 @@
     "coreos_channel": "stable",
     "coreos_version": "current",
 
-    "iso_checksum": "f4f9739488252b46e0a57bd47fb0dfca",
+    "iso_checksum": "d6eec5976ba312a4df49d440ca3e6e71",
     "iso_path": "iso",
 
     "ssh_username": "vagrant",
     "ssh_password": "vagrant",
 
     "update": "false",
-    "version": "0.1.0",
+    "version": "0.2.0",
 
     "vm_name": "coreos"
   }
