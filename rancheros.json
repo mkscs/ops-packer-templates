@@ -1,0 +1,78 @@
+{
+  "builders":[
+    {
+    "type": "virtualbox-iso",
+    "guest_os_type": "Linux_64",
+    "iso_urls": [
+      "{{ user `iso_path` }}/{{ user `iso_name` }}",
+      "https://releases.rancher.com/os/{{ user `rancheros_version` }}/rancheros.iso"
+    ],
+    "iso_checksum": "{{ user `iso_checksum` }}",
+    "iso_checksum_type": "md5",
+    "shutdown_command": "echo '{{ user `ssh_password` }}'|sudo -S shutdown -h now",
+    "ssh_username": "{{ user `ssh_username` }}",
+    "ssh_password": "{{ user `ssh_password` }}",
+    "boot_wait":"4s",
+    "ssh_wait_timeout": "30s",
+    "disk_size":"8000",
+    "format":"ova",
+    "headless":"{{ user `headless` }}",
+    "guest_additions_mode":"disable",
+    "vboxmanage": [
+      [
+        "modifyvm",
+        "{{.Name}}",
+        "--memory",
+        "1024"
+      ],
+      [
+        "modifyvm",
+        "{{.Name}}",
+        "--cpus",
+        "1"
+      ]
+    ]
+  }
+],
+  "post-processors": [
+      {
+        "keep_input_artifact": false,
+        "output": "box/{{ user `vm_name`}}-{{ user `version`}}.box",
+        "type": "vagrant",
+        "only": ["virtualbox-iso"]
+      }
+    ],
+  
+  "provisioners": [
+    {
+      "type":"file",
+      "source":"http/rancheros/cloud-config.yml",
+      "destination":"/tmp/cloud-config.yml"
+    },
+    {
+      "type":"shell",
+      "override": {
+        "virtualbox-iso": {
+           "scripts":[
+             "scripts/VBOX/rancheros/install-rancheros.sh"
+             ]
+        }
+      }
+    }
+  ],
+  
+  "variables":
+    {
+      "headless":"true",
+      "iso_checksum": "a00e746ccc85a467fbaadb9a84bdee32",
+      "rancheros_version":"latest",
+      "iso_path": "iso",
+
+      "ssh_username": "rancher",
+      "ssh_password": "rancher",
+
+      "version": "0.1.0",
+
+      "vm_name": "rancheros"
+    }
+}

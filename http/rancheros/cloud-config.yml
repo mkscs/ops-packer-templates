@@ -1,0 +1,135 @@
+#cloud-config
+rancher:
+  docker:
+    tls: true
+    tls_args: [--tlsverify, --tlscacert=/home/rancher/.docker/ca.pem, --tlscert=/home/rancher/.docker/server-cert.pem, --tlskey=/home/rancher/.docker/server-key.pem, -H, 'tcp://0.0.0.0:2376']
+    args: [daemon, --log-opt, max-size=25m, --log-opt, max-file=2, -s, overlay, -G, docker, -H, 'unix:///var/run/docker.sock', --userland-proxy=false]
+
+ssh_authorized_keys:
+  - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key
+write_files:
+  - path: /home/rancher/.docker/ca.pem
+    permissions: "0755"
+    owner: rancher
+    content: |
+      -----BEGIN CERTIFICATE-----
+      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
+      Ev+Lw2Xw44IOixOA36DXEArwejUtZclJRw==
+      -----END CERTIFICATE-----
+  - path: /home/rancher/.docker/server-cert.pem
+    permissions: "0755"
+    owner: rancher
+    content: |
+      -----BEGIN CERTIFICATE-----                                     
+      MIIE+TCCAuGgAwIBAgIJAM4dP4odwvbmMA0GCSqGSIb3DQEBCwUAMEUxCzAJBgNV
+      BAYTAkFVMRMwEQYDVQQIEwpTb21lLVN0YXRlMSEwHwYDVQQKExhJbnRlcm5ldCBX
+      aWRnaXRzIFB0eSBMdGQwHhcNMTUxMjEyMTA1NzUyWhcNMTYxMjExMTA1NzUyWjAS
+      MRAwDgYDVQQDEwdyYW5jaGVyMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKC
+      AgEAwfBhKrrmczsnnh2zfc7OrNiYDKdMG+0ypiKsDVIb7oJ0FhAGLINZ8vvxgRKx
+      9UZUi3axCDXXfDXlQz3dJxFFcLyQ62r7X4o43LY0+/gMW/NE6+RONaJcZMwLjH+N
+      SzGrM+R90dAg9feUU96j7Wvnzfr4SetB8vMi+WZuz8nMoNzXQF7UMnep2Krgj3Ky
+      OPggM8U8vu4MoJF94ImF64I37AdsOkQneuTv0eMYpOobn3o8zClZpCU9Q+W02ag7
+      T2Y6hXRfgjyBWKn8nuiCZTiTy1gJZz+p5Q2REG5EUYs5Y68MKW4FVKE4alsT17wW
+      iGAM59UMSvKhFaFnC1tNJ9NWXzgr7pJsyvttzfBY1/C4M1d7bZBq8Ja/pZlxXFrs
+      jXaFbnad736RsUy0vYDO6he2yIdASgsAhxbEsC+W+3fftoGe9FwGpiaxyN0QaJaJ
+      hnx51JUQzdkS++FuQU352Gv8Us/2KsN5c2zgbavL04LBJr3xrPNbd+x4UTpelbbg
+      kxaijvyI4S098s7Lpnr8fKyxDAbmeABQsvIMtICC4GW4+ivqUOozSK6uDHqqJcKS
+      WZQvsGyKQSnLP1mkXlCTknkuBvcb8ieyKmg3hT6F1ACqzL2aNGhcAMy6JddJnq36
+      xf5t2Dm0zpwY8Im4SfvE4ucmsu3kVMqtPgjqa6ZnLniD8hMCAwEAAaMfMB0wGwYD
+      VR0RBBQwEocECgoKFIcECgADCocEfwAAATANBgkqhkiG9w0BAQsFAAOCAgEAYl5x
+      pDVjUVPe6FczpezjvyGQdEN+JONRyNfEQiMgBtyJP8lm5uVQIFw5l8VGVH/rfhPe
+      lFYCxYt1L+gvlTN0X53b0iLUSBe7VF2xtQs5t61IQhY864LQIRd6niuXDijPUhbk
+      WvLKA8mFEB2T79BnpeoYaXkbl1eYGHy5VYRWfG2m3zSErg62eOVR5iz1lkyX12uA
+      m6VnFlP7uvV5PEV3mjhhzZnud3TpkYqmnQwRcEE57MskMuh3yrE1gQriopERaSQ0
+      NHXKf20J0weMjbnxqB5IhzgL3B+XWO+MrBQPraCPg9m0GcvjTyuF/96QvTUxVnwo
+      n7ekzS5hnz2pZTK1vciDkwXcvlP1cT4MtkEnNfR0YQ1joT0xFDMWZeFFTDMPSnL3
+      uQ5G58UpsTudbsWpjhKdBNRYwmbGlnYCrVyrJVXBfhS99P2eNtA5CcI3ynsah3Qh
+      Umfn+Q5MJemefRJnj96TTFlVkVf1UL+WcW4wXG13WAVFjoam12KrlN6QZBvKo+/v
+      IMbMdl2DqjGM2uGeWnZQAQP68Q21laknJtmUXXNCzx/GNENx55H1K6P7uHWH6T3C
+      NkWlMHhzSsCjgDn+WUCzTv66BWhfyzproRzKnj7E0kv9iklF++h3x3CGAKzOBlfD
+      ZlZVVBRn/OWqtE3q3lWcjpfAbnnw4zUnPwNeZyM=                        
+      -----END CERTIFICATE-----
+  - path: /home/rancher/.docker/server-key.pem
+    permissions: "0755"
+    owner: rancher
+    content: |
+       -----BEGIN RSA PRIVATE KEY-----
+       MIIJKgIBAAKCAgEAwfBhKrrmczsnnh2zfc7OrNiYDKdMG+0ypiKsDVIb7oJ0FhAG
+       LINZ8vvxgRKx9UZUi3axCDXXfDXlQz3dJxFFcLyQ62r7X4o43LY0+/gMW/NE6+RO
+       NaJcZMwLjH+NSzGrM+R90dAg9feUU96j7Wvnzfr4SetB8vMi+WZuz8nMoNzXQF7U
+       Mnep2Krgj3KyOPggM8U8vu4MoJF94ImF64I37AdsOkQneuTv0eMYpOobn3o8zClZ
+       pCU9Q+W02ag7T2Y6hXRfgjyBWKn8nuiCZTiTy1gJZz+p5Q2REG5EUYs5Y68MKW4F
+       VKE4alsT17wWiGAM59UMSvKhFaFnC1tNJ9NWXzgr7pJsyvttzfBY1/C4M1d7bZBq
+       8Ja/pZlxXFrsjXaFbnad736RsUy0vYDO6he2yIdASgsAhxbEsC+W+3fftoGe9FwG
+       piaxyN0QaJaJhnx51JUQzdkS++FuQU352Gv8Us/2KsN5c2zgbavL04LBJr3xrPNb
+       d+x4UTpelbbgkxaijvyI4S098s7Lpnr8fKyxDAbmeABQsvIMtICC4GW4+ivqUOoz
+       SK6uDHqqJcKSWZQvsGyKQSnLP1mkXlCTknkuBvcb8ieyKmg3hT6F1ACqzL2aNGhc
+       AMy6JddJnq36xf5t2Dm0zpwY8Im4SfvE4ucmsu3kVMqtPgjqa6ZnLniD8hMCAwEA
+       AQKCAgAcVmtcOwMBQ1t+lwhrEZTRXLSa5LcSPY5xCA/rwluidh1QO/cq+eZiwr1/
+       BqRKGoSv/B/R+0wJMjbVpGx0EOn8lxD11SP1ydSVK2qChrQHm3wum6Vx4M9vSwFE
+       /j4/BnrlkjVwOuEWD570wkthnaq5RjqRUnbIcQ5jMrxuUCY+OwaYuUJ4PVPr/Mvj
+       Kfcwq9DIv8EohNADhj7GWFHhH53cNxlxShQauOjx2iT3s91laA8KJeCbQ3W4PhA2
+       3YYNC/rxFRf/h6e+tNfcwEyNTb8Kr0pwc7T3awwPQo1o/Nbd4e38/753pzb/E1/K
+       3gjM1HwOQ+sP6HPxHSxZVHXpo8+yyNbiP3wyXYhXcM4h3erKSs1XsN1pnRCaohFv
+       Whxj4NdDSjE1M0vLLRqGPvdJ8dplVHk63LHl7x1q6Ip3xaVVX8C39B1F0PblCBWv
+       8E/QbIHoPxsRtmh9J08py938OWW5x7+uL8Ye7AAFwPhXMO4+grs6oK2P46LzyPxA
+       ZwGGT4wA8KtDWkxn/S+EvOcF0ey7H1I3HuHJM2YoLTR1IYaiUiwOhgQoAlhdkyOV
+       pglsWfWnHqRSAruL+fEUTTCOBb2IV3ZUJB1DKACbNgc/fVGmyOm/XCd/eWMFz0n+
+       RdXxkKCTsLKO7nAndh9/2qC+Haw09NbN2Zh4Ab5uoe5FAhoEQQKCAQEA7ljuWp0Q
+       YnxeohZaagEwqajAQUD4eO78K1DZiF0dlmOasM7VVBDhQGVg41kldjUxCI7nuSki
+       CXfxgc8d4njnZ+4ffra/3kFuNdBpjNYSieMrHB3qMs81DZd8zK/5hFtOIsmWYd2F
+       DudRpj+EKbIorBvyAipB+KYaVCMpJWHx4U3/Ah63be7w8lYR/zXZ6WhipronrWsA
+       VGpGJ4MCPCfKAWQh4UMDzIYTOLC1PDjbF28ScImZf6YJoPX8D2E5kalvANQ++Qq4
+       UsOMDjeNTOt4/tgHOfCHBq7grNwoZk6BfGgp8jYqwinQB1wuSOfADo7T5NGDze8H
+       3WVBUVrOdU8IrQKCAQEA0E129VcO0LC2tPsza23crMNs+552BLu1+hoOmO4FOrpr
+       Jv+qntIflT87bPpXhxWcOu9sbU2X7OqGfHKGG8m/x53OGvrxPMOaMwwGk6cHZqgS
+       dF5xZ4rmRYBV2rDz4V/q3a7hY2s0PsbNuC3Gpvme31DGYvcGA5JIi40Vpp22WkSC
+       YSw/acSS0jTwwZw3lvHpAADwsgtWFg8xu66/2NaXqBuoq57WkU3Ul7RW0TprXNUe
+       njyFQdfS+0XZbOjnmZMwGj7Vw3f8h47VuR2UpFGAzYBMP49O+fJ7o+jt1jXM/m+k
+       1cOD9VVpe/i2sjTNV1rZO6jhOwYHRhTf5X33opB9vwKCAQEAhy122Xt03HZu8Xy+
+       AJr2L3LevuOLSIM6D5MGHNm6ux14kUhtIwWDyxL0NVzM61LVoWXzNEeI31fgZ9/A
+       sj4h+AbMZABfpzzytaCjDFYpI3zsaUDqH7D3BONiy3AOkqt6EC7GlHCfU0mMPD6P
+       xVoeySX8RpAS5GPIUOm0H1iCZ2bl9xzWqYm3q6l3AYhYM5GZSbgQYsFp6XZwnV4m
+       +VkTr2BL+scYM3njEubdku8oCw1apurTXNsdYOXB9DMPBHbU1uKJaJNU4NO47iNB
+       h1uRPu/kgU7SNc8e68rdOtDRjW5CQ/XGoGI4csQsF/sgKOGGeaL+HuCvVDhmKC7Z
+       Ix0U7QKCAQEAz8ZlQUWsbnfGV3I2ERONyfpJDBc8y23dj/JL2zmYl8L5PPZK347i
+       mAFxqjtv8TuaEaNeeQyr3VL2AM5PfQpZtKhwvLLQzHajqgV1zfQOytQdTFwkLE79
+       cBgaC0D0kzsU0DkvcvatL20oKG3ouAdH9KLisDaMliVlHWYGUaMBELtDfeAgBMVi
+       WjEacVT8kiEM88b8T+xE204eooIltQogTjwAm+edSWTkCMqGyr7F9txSZS4jEdFR
+       DvjWbu9GjQanNZa1rPtTNnhAMR0TdnAh1VoDNGcjNOgtcgrWqhQSPT1poxwZ1S50
+       QIeO3OUUae0hwIOs3i4eNUZ/Kq/iwhH0iwKCAQEAzv86c+2rhzshjkUon9wHP3Qa
+       heJYmmgDN9E3nL0zhY6t+2rO9OsEMTFBbx47gHM7bHSfhLjLnirYRM8H3G4eI08j
+       PQUrsWEnUVfghUw/mYKzDu+/uxac9mxGbdQHvQMF1DYzbHURJ1KudK3og217Mdbo
+       iSYLyBDwd2pu7+9s2Q1sh7NxyoZ95IOJJrBtEPdt8jMNxjAPyDHI/FuTv6lBY8Pv
+       b7zc5FTaImtyfCOzgqe2p6kaLGwuyq0uKmpBFuNhJHYlZ/s4jHGceP5qp12fflQn
+       rI+ikGhxYLTKesGcduALaf56agtaPdGBXC5Y+ebcqK5P/+rLcksT1kmUdmhfrA==
+       -----END RSA PRIVATE KEY-----
