@@ -28,20 +28,20 @@ apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E8
 apt-get update -y
 
 # install packages
-apt-get -y install upstart-sysv			\
- 									 docker-engine		\
-									 zsh							\
-									 autoconf					\
-									 bison						\
-									 build-essential	\
-									 libssl-dev 			\
-									 libyaml-dev			\
-									 libreadline6-dev \
-									 zlib1g-dev 			\
-									 libncurses5-dev	\
-									 libffi-dev 			\
-									 libgdbm3 				\
-									 libgdbm-dev
+apt-get -y install upstart-sysv     \
+                   docker-engine    \
+                   zsh              \
+                   autoconf         \
+                   bison            \
+                   build-essential  \
+                   libssl-dev       \
+                   libyaml-dev      \
+                   libreadline6-dev \
+                   zlib1g-dev       \
+                   libncurses5-dev  \
+                   libffi-dev       \
+                   libgdbm3         \
+                   libgdbm-dev
 
 
 update-initramfs -u
