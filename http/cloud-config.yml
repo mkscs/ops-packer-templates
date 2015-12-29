@@ -1,0 +1,56 @@
+#cloud-config
+users:
+  - name: vagrant
+    passwd: $1$I4YxL3Fc$vzc8RvF3GCT2D2QO2phsw1
+    groups:
+      - docker
+      - sudo
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key
+write_files:
+  - path: /etc/systemd/network/dhcp.network
+    permissions: 0644
+    content: |
+        [Match]
+        Name=e*
+        [Network]
+        DHCP=yes
+        [DHCPv4]
+        UseHostname=true
+  - path: /etc/ssh/sshd_config
+    content: |
+        UsePrivilegeSeparation sandbox
+        PermitRootLogin yes
+        PasswordAuthentication yes
+        UseDNS no
+        Subsystem sftp internal-sftp
+  - path: /root/.bash_profile
+    content: |
+        export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/opt"
+coreos:
+  update:
+    reboot-strategy: off
+
+  units:
+    - name: etcd.service
+      command: stop
+
+    - name: fleet.service
+      command: stop
+
+    - name: docker-tcp.socket
+      command: start
+      enable: true
+      content: |
+        [Unit]
+        Description=Docker Socket for the API
+
+        [Socket]
+        ListenStream=2375
+        BindIPv6Only=both
+        Service=docker.service
+
+        [Install]
+        WantedBy=sockets.target
+
+hostname: coreoslayer

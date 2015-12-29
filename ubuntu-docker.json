@@ -79,14 +79,16 @@
       "override": {
         "virtualbox-iso": {
           "scripts": [
-            "scripts/default.sh",
+            "scripts/default_ubuntu/default.sh",
+            "scripts/default_ubuntu/ubuntu-1504/install-ruby.sh",
             "scripts/VBOX/vbox_base.sh"
           ]
         },
 
         "digitalocean": {
           "scripts": [
-            "scripts/default.sh",
+            "scripts/default_ubuntu/default.sh",
+            "scripts/default_ubuntu/ubuntu-1504/install-ruby.sh",
             "scripts/DO/do_env.sh"
           ]
         }
@@ -94,7 +96,7 @@
     }
   ],
   "variables": {
-    "headless": "",
+    "headless": "true",
 
 
     "iso_checksum": "6501c8545374665823384bbb6235f865108f56d8a30bbf69dd18df73c14ccb84",
@@ -106,7 +108,7 @@
     "ssh_password": "vagrant",
 
     "update": "false",
-    "version": "0.1.0",
+    "version": "0.2.0",
 
     "do_api_token": "{{ env `DO_API_TOKEN` }}",
     "do_region": "fra1",
